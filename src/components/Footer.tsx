@@ -40,23 +40,23 @@ const Footer = () => {
   };
 
   return (
-    <footer className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 mb-6">
+    <footer className="bg-white py-4 sm:py-5 text-center text-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-8"
+          className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-4 sm:my-5"
         />
 
-        <div className="flex flex-col md:flex-row justify-between items-center">
+        <div className="flex flex-col items-center justify-center gap-3 sm:gap-4">
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="from-purple-600 to-pink-600 text-sm mb-4 md:mb-0"
+            className="text-gray-600 text-xs sm:text-sm"
           >
             © {new Date().getFullYear()} Yuvaraj's Portfolio. All rights reserved.
           </motion.p>
@@ -66,7 +66,7 @@ const Footer = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={containerVariants}
-            className="flex gap-6"
+            className="flex gap-4 sm:gap-5"
           >
             {socialLinks.map((link, index) => (
               <motion.a
@@ -75,15 +75,15 @@ const Footer = () => {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`text-gray-400 transition-colors text-xl relative group
-                  ${link.name === 'GitHub' ? 'hover:text-yellow-300' : ''}
+                className={`text-gray-400 transition-colors text-xl sm:text-2xl relative group
+                  ${link.name === 'GitHub' ? 'hover:text-yellow-400' : ''}
                   ${link.name === 'LinkedIn' ? 'hover:text-blue-500' : ''}
                   ${link.name === 'Email' ? 'hover:text-red-500' : ''}`}
-                whileHover={{ y: -3 }}
+                whileHover={{ y: -2 }}
                 aria-label={link.name}
               >
                 {link.icon}
-                <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                <span className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-xs bg-gray-800 text-white px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                   {link.name}
                 </span>
               </motion.a>

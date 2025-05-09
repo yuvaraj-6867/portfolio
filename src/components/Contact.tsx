@@ -49,136 +49,113 @@ const Contact = () => {
         "3y2xX9KZEAOy-Z-hm"
       )
       .then(() => {
-        setFeedback({
-          text: "Message sent successfully!",
-          isError: false,
-        });
+        setFeedback({ text: "Message sent successfully!", isError: false });
         setFormData({ name: "", email: "", subject: "", message: "" });
-
-        setTimeout(() => {
-          setFeedback({ text: "", isError: false });
-        }, 3000);
+        setTimeout(() => setFeedback({ text: "", isError: false }), 3000);
       })
       .catch(() => {
         setFeedback({
           text: "Failed to send message. Please try again later.",
           isError: true,
         });
-
-        setTimeout(() => {
-          setFeedback({ text: "", isError: false });
-        }, 3000);
+        setTimeout(() => setFeedback({ text: "", isError: false }), 3000);
       })
       .finally(() => setIsSubmitting(false));
   };
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+    <section
+      id="contact"
+      className="py-40 sm:py-40 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"
+    >
       <div className="container mx-auto px-4 sm:px-6">
+        {/* Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="text-center mb-12"
+          className="text-center mb-10 sm:mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 mb-4">
             Contact Me
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full"></div>
-          <p className="text-gray-700 mt-6 max-w-xl mx-auto text-lg">
-            Have a project that needs testing? Feel free to reach out – I'm always open to discuss new opportunities.
+          <div className="w-16 h-1 mx-auto bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mb-4"></div>
+          <p className="text-gray-700 max-w-md mx-auto text-base sm:text-lg">
+            Have a project that needs testing? Feel free to reach out – I'm
+            always open to discuss new opportunities.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 justify-center">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 mt-10 sm:mt-16">
           {/* Contact Info */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="bg-white p-6 rounded-xl shadow-lg space-y-6 w-full max-w-lg mx-auto"
+            className="bg-white p-5 sm:p-6 rounded-xl shadow-lg space-y-6 w-full max-w-full mx-auto"
           >
-            <h3 className="text-2xl font-semibold mb-4 text-gray-800">Contact Information</h3>
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">
+              Contact Information
+            </h3>
 
-            <div className="flex items-start gap-4">
-              <div className="bg-purple-100 p-3 rounded-full">
-                <FiMail className="text-purple-600 text-xl" />
+            {[
+              {
+                icon: <FiMail className="text-purple-600" />,
+                label: "Email",
+                value: "yuvaraj6867@gmail.com",
+                link: "mailto:yuvaraj6867@gmail.com",
+              },
+              {
+                icon: <FiLinkedin className="text-blue-600" />,
+                label: "LinkedIn",
+                value: "linkedin.com/in/yuvaraj",
+                link: "https://www.linkedin.com/in/yuvaraj-b-608406270",
+              },
+              {
+                icon: <FiGithub className="text-yellow-800" />,
+                label: "GitHub",
+                value: "github.com/yuvaraj",
+                link: "https://github.com/yuvaraj-6867",
+              },
+              {
+                icon: <Phone className="text-blue-600" />,
+                label: "Phone",
+                value: "+91 9025986867",
+                link: "tel:+919025986867",
+              },
+              {
+                icon: <MapPin className="text-blue-600" />,
+                label: "Location",
+                value: "Coimbatore, Tamil Nadu, India",
+              },
+              {
+                icon: <Calendar className="text-blue-600" />,
+                label: "Availability",
+                value: "Open to full-time opportunities",
+              },
+            ].map(({ icon, label, value, link }, index) => (
+              <div key={index} className="flex items-start gap-4">
+                <div className="bg-purple-100 p-3 rounded-full">{icon}</div>
+                <div>
+                  <p className="text-gray-500 text-sm">{label}</p>
+                  {link ? (
+                    <a
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-800 hover:text-purple-600 break-words"
+                    >
+                      {value}
+                    </a>
+                  ) : (
+                    <p className="text-gray-800">{value}</p>
+                  )}
+                </div>
               </div>
-              <div>
-                <p className="text-gray-500 text-sm">Email</p>
-                <a href="mailto:yuvaraj6867@gmail.com" className="text-gray-800 hover:text-purple-600">
-                  yuvaraj6867@gmail.com
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <FiLinkedin className="text-blue-600 text-xl" />
-              </div>
-              <div>
-                <p className="text-gray-500 text-sm">LinkedIn</p>
-                <a
-                  href="https://www.linkedin.com/in/yuvaraj-b-608406270"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-800 hover:text-blue-600"
-                >
-                  linkedin.com/in/yuvaraj
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="bg-yellow-100 p-3 rounded-full">
-                <FiGithub className="text-yellow-800 text-xl" />
-              </div>
-              <div>
-                <p className="text-gray-500 text-sm">GitHub</p>
-                <a
-                  href="https://github.com/yuvaraj-6867"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-800 hover:text-yellow-600"
-                >
-                  github.com/yuvaraj
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <Phone className="text-blue-600 text-xl" />
-              </div>
-              <div>
-                <p className="text-gray-500 text-sm">Phone</p>
-                <a href="tel:+919025986867" className="text-gray-800 hover:text-blue-600">
-                  +91 9025986867
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <MapPin className="text-blue-600 text-xl" />
-              </div>
-              <div>
-                <p className="text-gray-500 text-sm">Location</p>
-                <p className="text-gray-800 hover:text-blue-600">Coimbatore, Tamil Nadu, India</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <Calendar className="text-blue-600 text-xl" />
-              </div>
-              <div>
-                <p className="text-gray-500 text-sm">Availability</p>
-                <p className="text-gray-800 hover:text-blue-600">Open to full-time opportunities</p>
-              </div>
-            </div>
+            ))}
           </motion.div>
 
           {/* Contact Form */}
@@ -188,9 +165,11 @@ const Contact = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="bg-white p-6 rounded-xl shadow-lg space-y-6 w-full max-w-lg mx-auto" 
+            className="bg-white p-5 sm:p-6 rounded-xl shadow-lg space-y-6 w-full max-w-full mx-auto"
           >
-            <h3 className="text-2xl font-semibold mb-4 text-gray-800">Send Me a Message</h3>
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">
+              Send Me a Message
+            </h3>
 
             <div>
               <label className="block text-gray-600 mb-2">Your Name</label>
@@ -200,7 +179,7 @@ const Contact = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -212,7 +191,7 @@ const Contact = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -224,7 +203,7 @@ const Contact = () => {
                 onChange={handleChange}
                 required
                 rows={5}
-                className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -239,7 +218,9 @@ const Contact = () => {
             {feedback.text && (
               <div
                 className={`p-4 mt-4 rounded-lg text-sm ${
-                  feedback.isError ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
+                  feedback.isError
+                    ? "bg-red-100 text-red-800"
+                    : "bg-green-100 text-green-800"
                 }`}
               >
                 {feedback.text}
