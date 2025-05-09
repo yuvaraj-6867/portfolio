@@ -93,9 +93,9 @@ const Navbar = () => {
             onClick={() => scrollToSection('home')}
             className="flex-shrink-0 cursor-pointer"
           >
-            <span className="text-white font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+            {/* <span className="text-white font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
               Yuvaraj
-            </span>
+            </span> */}
           </motion.div>
 
           {/* Desktop Navigation */}
