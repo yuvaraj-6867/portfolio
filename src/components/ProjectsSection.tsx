@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import SectionHeader from "./SectionHeader";
-import { containerVariants, itemVariants } from "./animations";
+import { gridContainer, gridItem, cardHover, buttonHover, buttonTap } from "./animations";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
 import swagLabsImage from "../assets/sauce-labs.svg";
 import projectVideo from "../assets/video.mp4";
@@ -31,9 +31,22 @@ const ProjectsSection = () => {
     },
   ];
 
+  // Tag animation variants
+  const tagVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: (i: number) => ({
+      opacity: 1,
+      scale: 1,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.3,
+      },
+    }),
+  };
+
   return (
-    <section id="projects" className="py-39 sm:py-39 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      <div className="container mx-auto px-4 sm:px-6 py-20">
+    <section id="projects" className="projects-section">
+      <div className="container projects-container">
         <SectionHeader
           title="My Projects"
           subtitle="A selection of my recent testing and automation projects"
@@ -42,78 +55,119 @@ const ProjectsSection = () => {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={containerVariants}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={gridContainer}
+          className="projects-grid"
         >
           {projects.map((project, index) => (
             <motion.div
               key={index}
-              variants={itemVariants}
-              whileHover={{ y: -5, scale: 1.01 }}
-              className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-200"
+              variants={gridItem}
+              whileHover={cardHover}
+              className="project-card"
             >
-              <div
-                className="h-48 sm:h-64 bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center cursor-pointer relative group"
+              {/* Image container with reveal animation */}
+              <motion.div
+                className="project-image-container"
                 onClick={() =>
                   setActiveVideoIndex(index === activeVideoIndex ? null : index)
                 }
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
               >
                 {index === activeVideoIndex && project.video ? (
-                  <video
+                  <motion.video
                     src={project.video}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="project-video"
                     controls
                     autoPlay
                     muted
                     loop
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
                     onError={(e) => console.error("Video error:", e)}
                   />
                 ) : (
                   <>
-                    <img
+                    <motion.img
                       src={project.image}
-                      className="w-32 sm:w-48 h-32 sm:h-48 object-contain transition-all duration-200 group-hover:scale-105"
+                      className="project-image"
                       alt={project.title}
+                      initial={{ scale: 1.1 }}
+                      whileInView={{ scale: 1 }}
+                      transition={{ duration: 0.8 }}
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'fallback-image-url';
+                        (e.target as HTMLImageElement).src = "fallback-image-url";
                       }}
                     />
                     {project.video && (
-                      <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <span className="text-white text-sm font-medium">Click to play demo</span>
-                      </div>
+                      <motion.div
+                        className="video-overlay"
+                        initial={{ opacity: 0 }}
+                        whileHover={{ opacity: 1 }}
+                      >
+                        <motion.span
+                          className="video-overlay-text"
+                          initial={{ y: 10 }}
+                          whileHover={{ y: 0 }}
+                        >
+                          Click to play demo
+                        </motion.span>
+                      </motion.div>
                     )}
                   </>
                 )}
-              </div>
+              </motion.div>
 
-              <div className="p-5">
-                <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-3">
+              <div className="project-info">
+                <motion.h3
+                  className="project-title"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                >
                   {project.title}
-                </h3>
-                <p className="text-gray-600 mb-4 text-sm sm:text-base">{project.description}</p>
+                </motion.h3>
+                <motion.p
+                  className="project-description"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                >
+                  {project.description}
+                </motion.p>
 
-                <div className="flex flex-wrap gap-2 mb-5">
+                {/* Tags with staggered animation */}
+                <div className="project-tags">
                   {project.tags.map((tag, i) => (
-                    <span
+                    <motion.span
                       key={i}
-                      className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs sm:text-sm"
+                      className="project-tag"
+                      custom={i}
+                      variants={tagVariants}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true }}
+                      whileHover={{ scale: 1.1, y: -2 }}
                     >
                       {tag}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
 
-                <div className="flex flex-wrap gap-4">
+                {/* Links with hover effects */}
+                <div className="project-links">
                   {project.github && (
                     <motion.a
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-purple-600 hover:text-purple-800 transition-colors text-sm sm:text-base"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
+                      className="project-link"
+                      whileHover={buttonHover}
+                      whileTap={buttonTap}
                     >
                       <FiGithub size={16} /> Code
                     </motion.a>
@@ -123,9 +177,9 @@ const ProjectsSection = () => {
                       href={project.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-purple-600 hover:text-purple-800 transition-colors text-sm sm:text-base"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
+                      className="project-link"
+                      whileHover={buttonHover}
+                      whileTap={buttonTap}
                     >
                       <FiExternalLink size={16} /> Demo
                     </motion.a>

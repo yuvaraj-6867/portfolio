@@ -1,31 +1,95 @@
+import { motion } from "framer-motion";
+import {
+  containerVariants,
+  itemVariants,
+  dividerExpand,
+  slideFromLeft,
+} from "./animations";
+
 const About = () => {
+  const paragraphs = [
+    {
+      text: "Hello! I'm a ",
+      highlight: "Junior Test Engineer",
+      rest: " with a strong interest in software quality and automation. I have experience working with testing frameworks like Jest, Cypress, and Selenium, and I'm passionate about ensuring applications are robust, reliable, and user-friendly.",
+    },
+    {
+      text: "I enjoy collaborating with developers and QA teams to write test cases, debug issues, and improve test coverage. I'm also learning frontend technologies like ",
+      highlight: "React",
+      highlight2: "CSS",
+      rest: " to better understand UI behavior and enhance my testing capabilities.",
+    },
+    {
+      text: "I'm eager to grow in the field of software testing and contribute to high-quality development workflows.",
+    },
+  ];
+
   return (
-    <section
-      id="about"
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"
-    >
-      <div className="max-w-4xl mx-auto px-4 animate-fadeInUp">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 mb-6 animate-text-gradient">
+    <section id="about" className="about-section">
+      <motion.div
+        className="about-container"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
+        {/* Header with animated divider */}
+        <div className="about-header">
+          <motion.h2
+            className="about-title"
+            variants={itemVariants}
+          >
             About Me
-          </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full animate-scaleX"></div>
+          </motion.h2>
+          <motion.div
+            className="about-divider"
+            variants={dividerExpand}
+            style={{ originX: 0.5 }}
+          />
         </div>
 
-        <div className="space-y-6">
-          <p className="text-gray-800 text-lg sm:text-xl leading-relaxed transition-colors duration-300 hover:text-gray-900">
-            Hello! I'm a <span className="font-semibold text-purple-600">Junior Test Engineer</span> with a strong interest in software quality and automation. I have experience working with testing frameworks like Jest, Cypress, and Selenium, and I'm passionate about ensuring applications are robust, reliable, and user-friendly.
-          </p>
-
-          <p className="text-gray-800 text-lg sm:text-xl leading-relaxed transition-colors duration-300 hover:text-gray-900">
-            I enjoy collaborating with developers and QA teams to write test cases, debug issues, and improve test coverage. I'm also learning frontend technologies like <span className="font-semibold text-purple-600">React</span> and <span className="font-semibold text-purple-600">Tailwind CSS</span> to better understand UI behavior and enhance my testing capabilities.
-          </p>
-
-          <p className="text-gray-800 text-lg sm:text-xl leading-relaxed transition-colors duration-300 hover:text-gray-900">
-            I'm eager to grow in the field of software testing and contribute to high-quality development workflows.
-          </p>
-        </div>
-      </div>
+        {/* Content with staggered paragraphs */}
+        <motion.div className="about-content">
+          {paragraphs.map((para, index) => (
+            <motion.p
+              key={index}
+              className="about-text"
+              variants={slideFromLeft}
+              custom={index}
+              whileHover={{
+                x: 10,
+                transition: { duration: 0.3 },
+              }}
+            >
+              {para.text}
+              {para.highlight && (
+                <motion.span
+                  className="text-highlight"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
+                >
+                  {para.highlight}
+                </motion.span>
+              )}
+              {para.highlight2 && (
+                <>
+                  {" and "}
+                  <motion.span
+                    className="text-highlight"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
+                  >
+                    {para.highlight2}
+                  </motion.span>
+                </>
+              )}
+              {para.rest}
+            </motion.p>
+          ))}
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

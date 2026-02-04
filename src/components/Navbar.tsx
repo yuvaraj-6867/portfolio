@@ -1,54 +1,95 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState('home');
 
-  const navLinks = [
+  const navLinks = useMemo(() => [
     { name: 'Home', id: 'home' },
     { name: 'Skills', id: 'skills' },
     { name: 'Projects', id: 'projects' },
     { name: 'About', id: 'about' },
     { name: 'Contact', id: 'contact' },
-  ];
+  ], []);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
-      navLinks.forEach(link => {
+
+      // Check if at top of page
+      if (window.scrollY < 100) {
+        setActiveLink('home');
+        return;
+      }
+
+      // Find which section is currently in view
+      let currentSection = 'home';
+      const navbarHeight = 100;
+
+      for (const link of navLinks) {
         const section = document.getElementById(link.id);
         if (section) {
           const rect = section.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveLink(link.id);
+          if (rect.top <= navbarHeight && rect.bottom > navbarHeight) {
+            currentSection = link.id;
           }
         }
-      });
+      }
+
+      setActiveLink(currentSection);
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Call once on mount
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [navLinks]);
 
   const scrollToSection = (id: string) => {
     setActiveLink(id);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    } else if (id === 'home') {
+
+    if (id === 'home') {
       window.scrollTo({
         top: 0,
         behavior: 'smooth',
       });
+      window.history.pushState(null, '', '/');
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        const navbarHeight = 80;
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({
+          top: elementPosition - navbarHeight,
+          behavior: 'smooth',
+        });
+        window.history.pushState(null, '', `#${id}`);
+      }
     }
     setIsOpen(false);
   };
+
+  // Handle hash on page load
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          const navbarHeight = 80;
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({
+            top: elementPosition - navbarHeight,
+            behavior: 'smooth',
+          });
+          setActiveLink(hash);
+        }
+      }, 100);
+    }
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -79,23 +120,18 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 15 }}
-      className={`fixed w-full z-50 transition-all duration-300 ${scrolled
-        ? 'bg-gradient-to-r from-purple-900/90 to-indigo-900/90 backdrop-blur-md py-2 shadow-lg'
-        : 'bg-transparent py-4'
-        }`}
+      className={`navbar ${scrolled ? 'scrolled' : ''}`}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="container">
+        <div className="navbar-content">
           {/* Logo/Brand */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => scrollToSection('home')}
-            className="flex-shrink-0 cursor-pointer"
+            className="navbar-brand"
           >
-            <span className="text-white font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-              Yuvaraj
-            </span>
+            Yuvaraj
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -103,41 +139,38 @@ const Navbar = () => {
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="hidden md:flex space-x-8"
+            className="navbar-links"
           >
             {navLinks.map((link) => (
               <motion.button
                 key={`nav-${link.id}`}
                 variants={itemVariants}
                 onClick={() => scrollToSection(link.id)}
-                className={`px-3 py-2 rounded-md text-sm font-medium relative group transition-colors ${activeLink === link.id
-                  ? 'text-white'
-                  : 'text-gray-300 hover:text-white'
-                  }`}
+                className={`nav-link ${activeLink === link.id ? 'active' : ''}`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 {link.name}
-                <span className={`absolute bottom-0 left-0 h-0.5 transition-all duration-300 ${activeLink === link.id
-                  ? 'w-full bg-gradient-to-r from-cyan-400 to-blue-500'
-                  : 'w-0 group-hover:w-full bg-gradient-to-r from-cyan-400 to-blue-500'
-                  }`}></span>
+                <span className={`nav-link-underline ${activeLink === link.id ? 'active' : ''}`}></span>
               </motion.button>
             ))}
+            <motion.div variants={itemVariants}>
+              <ThemeToggle />
+            </motion.div>
           </motion.div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
+          <div className="mobile-menu-btn-wrapper">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-indigo-800/50 focus:outline-none transition-colors"
+              className="mobile-menu-btn"
               aria-expanded="false"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
-                <FiX className="block h-6 w-6" />
+                <FiX style={{ display: 'block', height: '1.5rem', width: '1.5rem' }} />
               ) : (
-                <FiMenu className="block h-6 w-6" />
+                <FiMenu style={{ display: 'block', height: '1.5rem', width: '1.5rem' }} />
               )}
             </button>
           </div>
@@ -151,9 +184,9 @@ const Navbar = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="md:hidden bg-gradient-to-b from-purple-900/95 to-indigo-900/95 backdrop-blur-lg"
+          className="mobile-nav"
         >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <div className="mobile-nav-links">
             {navLinks.map((link) => (
               <motion.button
                 key={`mobile-nav-${link.id}`}
@@ -161,17 +194,22 @@ const Navbar = () => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: navLinks.indexOf(link) * 0.1 }}
                 onClick={() => scrollToSection(link.id)}
-                className={`block w-full text-left px-3 py-3 rounded-md text-base font-medium transition-colors ${activeLink === link.id
-                  ? 'bg-indigo-800/30 text-white'
-                  : 'text-gray-300 hover:text-white hover:bg-indigo-800/20'
-                  }`}
+                className={`mobile-nav-link ${activeLink === link.id ? 'active' : ''}`}
               >
                 {link.name}
                 {activeLink === link.id && (
-                  <span className="block h-0.5 w-6 bg-cyan-400 mt-1 rounded-full"></span>
+                  <span className="mobile-nav-indicator"></span>
                 )}
               </motion.button>
             ))}
+            <motion.div
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: navLinks.length * 0.1 }}
+              className="mobile-theme-toggle"
+            >
+              <ThemeToggle />
+            </motion.div>
           </div>
         </motion.div>
       )}

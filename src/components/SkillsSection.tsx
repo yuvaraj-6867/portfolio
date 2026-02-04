@@ -1,51 +1,64 @@
 import { motion } from "framer-motion";
 import { FaGitAlt, FaReact, FaLaptopCode, FaMobileAlt } from "react-icons/fa";
-import { SiTypescript, SiRuby } from 'react-icons/si';
-import { containerVariants, itemVariants } from "./animations";
+import { SiTypescript, SiRuby } from "react-icons/si";
+import { gridContainer, gridItem, cardHover } from "./animations";
 import SectionHeader from "./SectionHeader";
 import { FaCss3Alt, FaJs } from "react-icons/fa6";
 
 const SkillsSection = () => {
   const skills = [
-    { name: "JavaScript", icon: <FaJs className="text-yellow-400" /> },
-    { name: "Manual Testing", icon: <FaLaptopCode className="text-yellow-400" /> },
-    { name: "Mobile Testing", icon: <FaMobileAlt className="text-green-400" /> },
-    { name: "Playwright", icon: <div className="text-3xl">🎭</div> },
-    { name: "React", icon: <FaReact className="text-blue-400" /> },
-    { name: "Ruby", icon: <SiRuby className="text-cyan-400" /> },
-    { name: "TypeScript", icon: <SiTypescript className="text-blue-500" /> },
-    { name: "CSS", icon: <FaCss3Alt className="text-blue-400" /> },
-    { name: "Git", icon: <FaGitAlt className="text-orange-600" /> },
-    { name: "Test Cases", icon: <div className="text-3xl">📝</div> },
-    { name: "Bug Tracking", icon: <div className="text-3xl">🐞</div> },
+    { name: "JavaScript", icon: <FaJs className="icon-yellow" /> },
+    { name: "Manual Testing", icon: <FaLaptopCode className="icon-yellow" /> },
+    { name: "Mobile Testing", icon: <FaMobileAlt className="icon-green" /> },
+    { name: "Playwright", icon: <div className="skill-emoji">🎭</div> },
+    { name: "React", icon: <FaReact className="icon-blue" /> },
+    { name: "Ruby", icon: <SiRuby className="icon-cyan" /> },
+    { name: "TypeScript", icon: <SiTypescript className="icon-blue-dark" /> },
+    { name: "CSS", icon: <FaCss3Alt className="icon-blue" /> },
+    { name: "Git", icon: <FaGitAlt className="icon-orange" /> },
+    { name: "Test Cases", icon: <div className="skill-emoji">📝</div> },
+    { name: "Bug Tracking", icon: <div className="skill-emoji">🐞</div> },
   ];
 
   return (
-    <section id="skills" className="py-40 sm:py-40 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      <div className="container mx-auto px-6 py-20">
+    <section id="skills" className="skills-section">
+      <div className="container skills-container">
         <SectionHeader
           title="My Skills"
           subtitle="Technologies and tools I use to build and test quality software"
         />
 
-        {/* Skills Grid */}
+        {/* Skills Grid with staggered reveal */}
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
-          variants={containerVariants}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={gridContainer}
+          className="skills-grid"
         >
           {skills.map((skill, index) => (
             <motion.div
               key={index}
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-purple-500 transition-all"
+              variants={gridItem}
+              whileHover={cardHover}
+              className="skill-card"
             >
-              <div className="flex items-center gap-4">
-                <div className="text-3xl sm:text-4xl">{skill.icon}</div>
-                <h3 className="text-xl sm:text-2xl font-semibold text-white">{skill.name}</h3>
+              <div className="skill-content">
+                <motion.div
+                  className="skill-icon"
+                  initial={{ scale: 0, rotate: -180 }}
+                  whileInView={{ scale: 1, rotate: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    delay: index * 0.05,
+                    duration: 0.5,
+                    type: "spring",
+                    stiffness: 200,
+                  }}
+                >
+                  {skill.icon}
+                </motion.div>
+                <h3 className="skill-name">{skill.name}</h3>
               </div>
             </motion.div>
           ))}
