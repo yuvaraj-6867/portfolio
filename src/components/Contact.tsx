@@ -245,6 +245,23 @@ const Contact = () => {
               custom={2}
               variants={formFieldVariants}
             >
+              <label className="form-label">Subject</label>
+              <motion.input
+                type="text"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+                className="form-input"
+                whileFocus={{ scale: 1.01, borderColor: "rgba(139, 92, 246, 0.5)" }}
+              />
+            </motion.div>
+
+            <motion.div
+              className="form-group"
+              custom={3}
+              variants={formFieldVariants}
+            >
               <label className="form-label">Message</label>
               <motion.textarea
                 name="message"

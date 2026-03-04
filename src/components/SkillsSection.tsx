@@ -1,23 +1,26 @@
 import { motion } from "framer-motion";
-import { FaGitAlt, FaReact, FaLaptopCode, FaMobileAlt } from "react-icons/fa";
-import { SiTypescript, SiRuby } from "react-icons/si";
+import { FaGitAlt, FaReact, FaLaptopCode } from "react-icons/fa";
+import { SiTypescript, SiRuby, SiJira, SiSelenium, SiJenkins } from "react-icons/si";
 import { gridContainer, gridItem, cardHover } from "./animations";
 import SectionHeader from "./SectionHeader";
 import { FaCss3Alt, FaJs } from "react-icons/fa6";
 
 const SkillsSection = () => {
   const skills = [
-    { name: "JavaScript", icon: <FaJs className="icon-yellow" /> },
-    { name: "Manual Testing", icon: <FaLaptopCode className="icon-yellow" /> },
-    { name: "Mobile Testing", icon: <FaMobileAlt className="icon-green" /> },
-    { name: "Playwright", icon: <div className="skill-emoji">🎭</div> },
-    { name: "React", icon: <FaReact className="icon-blue" /> },
-    { name: "Ruby", icon: <SiRuby className="icon-cyan" /> },
-    { name: "TypeScript", icon: <SiTypescript className="icon-blue-dark" /> },
-    { name: "CSS", icon: <FaCss3Alt className="icon-blue" /> },
-    { name: "Git", icon: <FaGitAlt className="icon-orange" /> },
-    { name: "Test Cases", icon: <div className="skill-emoji">📝</div> },
-    { name: "Bug Tracking", icon: <div className="skill-emoji">🐞</div> },
+    { name: "Playwright", icon: <div className="skill-emoji">🎭</div>, level: "Intermediate" },
+    { name: "Selenium", icon: <SiSelenium className="icon-green" />, level: "Intermediate" },
+    { name: "Manual Testing", icon: <FaLaptopCode className="icon-yellow" />, level: "Intermediate" },
+    { name: "TypeScript", icon: <SiTypescript className="icon-blue-dark" />, level: "Intermediate" },
+    { name: "JavaScript", icon: <FaJs className="icon-yellow" />, level: "Intermediate" },
+    { name: "Ruby", icon: <SiRuby className="icon-cyan" />, level: "Intermediate" },
+    { name: "JIRA / Linear", icon: <SiJira className="icon-blue" />, level: "Intermediate" },
+    { name: "Jenkins", icon: <SiJenkins className="icon-orange" />, level: "Beginner" },
+    { name: "Git / GitHub", icon: <FaGitAlt className="icon-orange" />, level: "Intermediate" },
+    { name: "React", icon: <FaReact className="icon-blue" />, level: "Beginner" },
+    { name: "CSS / HTML", icon: <FaCss3Alt className="icon-blue" />, level: "Intermediate" },
+    { name: "Test Cases", icon: <div className="skill-emoji">📝</div>, level: "Intermediate" },
+    { name: "JMeter", icon: <div className="skill-emoji">⚡</div>, level: "Beginner" },
+    { name: "Bug Tracking", icon: <div className="skill-emoji">🐞</div>, level: "Intermediate" },
   ];
 
   return (
@@ -58,7 +61,12 @@ const SkillsSection = () => {
                 >
                   {skill.icon}
                 </motion.div>
-                <h3 className="skill-name">{skill.name}</h3>
+                <div className="skill-info">
+                  <h3 className="skill-name">{skill.name}</h3>
+                  <span className={`skill-level skill-level-${skill.level.toLowerCase()}`}>
+                    {skill.level}
+                  </span>
+                </div>
               </div>
             </motion.div>
           ))}

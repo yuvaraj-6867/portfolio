@@ -9,6 +9,26 @@ interface SocialLink {
   className: string;
 }
 
+const navLinks = [
+  { name: 'Home', id: 'home' },
+  { name: 'Skills', id: 'skills' },
+  { name: 'Projects', id: 'projects' },
+  { name: 'About', id: 'about' },
+  { name: 'Contact', id: 'contact' },
+];
+
+const scrollToSection = (id: string) => {
+  if (id === 'home') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    const element = document.getElementById(id);
+    if (element) {
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({ top: elementPosition - 80, behavior: 'smooth' });
+    }
+  }
+};
+
 const Footer = () => {
   const socialLinks: SocialLink[] = [
     { icon: <FiGithub />, href: "https://github.com/yuvaraj-6867", name: "GitHub", className: "github" },
@@ -50,6 +70,25 @@ const Footer = () => {
           transition={{ duration: 0.5 }}
           className="footer-divider"
         />
+
+        {/* Quick nav links */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+          className="footer-nav-links"
+        >
+          {navLinks.map((link) => (
+            <button
+              key={link.id}
+              className="footer-nav-link"
+              onClick={() => scrollToSection(link.id)}
+            >
+              {link.name}
+            </button>
+          ))}
+        </motion.div>
 
         <div className="footer-content">
           <motion.p

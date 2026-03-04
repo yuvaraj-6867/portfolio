@@ -4,23 +4,31 @@ import {
   itemVariants,
   dividerExpand,
   slideFromLeft,
+  gridItem,
 } from "./animations";
+
+const stats = [
+  { number: "1.7", label: "Years Exp." },
+  { number: "350+", label: "Test Cases" },
+  { number: "150+", label: "Automation Scripts" },
+  { number: "2", label: "Projects" },
+];
 
 const About = () => {
   const paragraphs = [
     {
       text: "Hello! I'm a ",
-      highlight: "Junior Test Engineer",
-      rest: " with a strong interest in software quality and automation. I have experience working with testing frameworks like Jest, Cypress, and Selenium, and I'm passionate about ensuring applications are robust, reliable, and user-friendly.",
+      highlight: "Quality Analyst",
+      rest: " with 1.7 years of expertise in manual and automation testing. I've delivered 350+ test cases and 150+ automation scripts across payroll and CRM systems at Drylogic Solutions, Coimbatore.",
     },
     {
-      text: "I enjoy collaborating with developers and QA teams to write test cases, debug issues, and improve test coverage. I'm also learning frontend technologies like ",
-      highlight: "React",
-      highlight2: "CSS",
-      rest: " to better understand UI behavior and enhance my testing capabilities.",
+      text: "I'm proficient in ",
+      highlight: "Playwright (TypeScript)",
+      highlight2: "Selenium (Ruby)",
+      rest: " and experienced in defect management using JIRA, Linear, and GitHub. I execute functional, regression, smoke, sanity, and story-level testing across Agile sprints.",
     },
     {
-      text: "I'm eager to grow in the field of software testing and contribute to high-quality development workflows.",
+      text: "I also have knowledge of frontend technologies like React and CSS, which helps me better understand UI behavior and write more precise test cases.",
     },
   ];
 
@@ -87,6 +95,22 @@ const About = () => {
               )}
               {para.rest}
             </motion.p>
+          ))}
+        </motion.div>
+
+        {/* Stats grid */}
+        <motion.div
+          className="about-stats"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={containerVariants}
+        >
+          {stats.map((stat, i) => (
+            <motion.div key={i} className="stat-item" variants={gridItem}>
+              <div className="stat-number">{stat.number}</div>
+              <div className="stat-label">{stat.label}</div>
+            </motion.div>
           ))}
         </motion.div>
       </motion.div>

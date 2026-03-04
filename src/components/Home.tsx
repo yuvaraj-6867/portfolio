@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
+import { FiDownload } from "react-icons/fi";
 import {
   containerVariants,
   itemVariants,
@@ -12,6 +13,38 @@ import {
   pulseGlow,
 } from "./animations";
 import profileImage from "../assets/sauce-labs.svg";
+
+const roles = ["Quality Analyst", "Automation Tester", "QA Professional", "Test Engineer"];
+
+const useTypedText = (texts: string[]) => {
+  const [displayText, setDisplayText] = useState("");
+  const [textIndex, setTextIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentText = texts[textIndex];
+    const speed = isDeleting ? 50 : 80;
+
+    const timer = setTimeout(() => {
+      if (!isDeleting && displayText === currentText) {
+        setTimeout(() => setIsDeleting(true), 1500);
+        return;
+      }
+      if (isDeleting && displayText === "") {
+        setIsDeleting(false);
+        setTextIndex((prev) => (prev + 1) % texts.length);
+        return;
+      }
+      setDisplayText((prev) =>
+        isDeleting ? prev.slice(0, -1) : currentText.slice(0, prev.length + 1)
+      );
+    }, speed);
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, textIndex, texts]);
+
+  return displayText;
+};
 
 // Animated text component for word-by-word reveal
 const AnimatedText = ({ text, className }: { text: string; className?: string }) => {
@@ -48,6 +81,8 @@ const Home = () => {
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);
+
+  const typedText = useTypedText(roles);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -120,7 +155,7 @@ const Home = () => {
                   ease: "easeInOut",
                 }}
               >
-                JUNIOR TEST ENGINEER
+                QUALITY ANALYST
               </motion.span>
             </motion.div>
 
@@ -137,10 +172,17 @@ const Home = () => {
               </motion.span>
             </motion.h1>
 
+            {/* Typed role text */}
+            <motion.div variants={itemVariants} className="typed-role">
+              <span className="typed-role-prefix">I'm a </span>
+              <span className="typed-text">{typedText}</span>
+              <span className="typed-cursor" />
+            </motion.div>
+
             {/* Description with word-by-word reveal */}
             <motion.div variants={itemVariants} className="home-description">
               <AnimatedText
-                text="I'm a Junior Test Engineer passionate about manual and automation testing. I write and execute test cases, report bugs, and ensure seamless web experiences."
+                text="Results-driven QA professional with 1.7 years of expertise in manual and automation testing. Proficient in Playwright, Selenium, and defect management using JIRA and Linear."
               />
             </motion.div>
 
@@ -162,6 +204,16 @@ const Home = () => {
               >
                 View Projects
               </motion.button>
+              <motion.a
+                href="/resume.pdf"
+                download
+                className="btn-download"
+                whileHover={buttonHover}
+                whileTap={buttonTap}
+              >
+                <FiDownload size={16} />
+                Download CV
+              </motion.a>
             </motion.div>
           </motion.div>
 

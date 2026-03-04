@@ -5,6 +5,7 @@ import { gridContainer, gridItem, cardHover, buttonHover, buttonTap } from "./an
 import { FiGithub, FiExternalLink } from "react-icons/fi";
 import swagLabsImage from "../assets/sauce-labs.svg";
 import projectVideo from "../assets/video.mp4";
+import computerImage from "../assets/computer_4202976.png";
 
 type Project = {
   title: string;
@@ -14,6 +15,7 @@ type Project = {
   github?: string;
   image: string;
   video?: string;
+  type: "personal" | "work";
 };
 
 const ProjectsSection = () => {
@@ -28,6 +30,42 @@ const ProjectsSection = () => {
       github: "https://github.com/yuvaraj-6867/swag_labs-website.git",
       image: swagLabsImage,
       video: projectVideo,
+      type: "personal",
+    },
+    {
+      title: "BugZera – Test Management Platform",
+      description:
+        "Built a complete test management and bug tracking platform from scratch. Features include test case management, bug tracking, Playwright/Selenium integration, real-time analytics, sprint management, and role-based access control.",
+      tags: ["React", "TypeScript", "Ruby on Rails", "PostgreSQL", "Docker"],
+      link: "https://bugzera.shop",
+      github: "https://github.com/yuvaraj106/bugzera",
+      image: computerImage,
+      type: "personal",
+    },
+    {
+      title: "Construction Management System",
+      description:
+        "Full-stack construction management app with modules for project tracking, worker management, daily attendance with wage calculation, payments, materials, invoices, and PDF/Excel exports. Supports bilingual (English & Tamil) and role-based access for 5 user roles.",
+      tags: ["React", "TypeScript", "Ruby on Rails", "PostgreSQL", "Docker"],
+      link: "https://construction.bugzera.shop",
+      image: computerImage,
+      type: "personal",
+    },
+    {
+      title: "GreenRoom – Payroll & Tax Management",
+      description:
+        "Engineered 150+ Playwright automation scripts in TypeScript for payroll processing and tax compliance workflows (US). Designed and executed 200+ manual test cases covering end-to-end payroll cycles, compliance requirements, and financial reporting. Also initiated performance testing using JMeter.",
+      tags: ["Playwright", "TypeScript", "JMeter", "JIRA"],
+      image: computerImage,
+      type: "work",
+    },
+    {
+      title: "MERKENSOFT – CRM for Textile Industry",
+      description:
+        "Executed comprehensive QA across Agile sprints including smoke, sanity, regression, and story-level testing. Developed 150+ test cases and automated critical workflows using Playwright and Selenium, reducing testing time by 40%. Recognized by client for proactive identification of critical defects.",
+      tags: ["Playwright", "Selenium", "Ruby", "Linear"],
+      image: computerImage,
+      type: "work",
     },
   ];
 
@@ -121,6 +159,9 @@ const ProjectsSection = () => {
               </motion.div>
 
               <div className="project-info">
+                <span className={`project-type-badge project-type-${project.type}`}>
+                  {project.type === "work" ? "Work Project" : "Personal Project"}
+                </span>
                 <motion.h3
                   className="project-title"
                   initial={{ opacity: 0, y: 10 }}
