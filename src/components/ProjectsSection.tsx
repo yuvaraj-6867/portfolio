@@ -20,6 +20,7 @@ type Project = {
 
 const ProjectsSection = () => {
   const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null);
+  const [filter, setFilter] = useState<"all" | "personal" | "work">("all");
 
   const projects: Project[] = [
     {
@@ -38,7 +39,6 @@ const ProjectsSection = () => {
         "Built a complete test management and bug tracking platform from scratch. Features include test case management, bug tracking, Playwright/Selenium integration, real-time analytics, sprint management, and role-based access control.",
       tags: ["React", "TypeScript", "Ruby on Rails", "PostgreSQL", "Docker"],
       link: "https://bugzera.shop",
-      github: "https://github.com/yuvaraj106/bugzera",
       image: computerImage,
       type: "personal",
     },
@@ -69,7 +69,6 @@ const ProjectsSection = () => {
     },
   ];
 
-  // Tag animation variants
   const tagVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: (i: number) => ({
@@ -82,6 +81,8 @@ const ProjectsSection = () => {
     }),
   };
 
+  const filteredProjects = filter === "all" ? projects : projects.filter(p => p.type === filter);
+
   return (
     <section id="projects" className="projects-section">
       <div className="container projects-container">
@@ -90,6 +91,20 @@ const ProjectsSection = () => {
           subtitle="A selection of my recent testing and automation projects"
         />
 
+        <motion.div className="project-filters" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          {["all", "personal", "work"].map((f) => (
+            <motion.button
+              key={f}
+              onClick={() => setFilter(f as typeof filter)}
+              className={`filter-btn ${filter === f ? "active" : ""}`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {f.charAt(0).toUpperCase() + f.slice(1)}
+            </motion.button>
+          ))}
+        </motion.div>
+
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -97,14 +112,13 @@ const ProjectsSection = () => {
           variants={gridContainer}
           className="projects-grid"
         >
-          {projects.map((project, index) => (
+          {filteredProjects.map((project, index) => (
             <motion.div
               key={index}
               variants={gridItem}
               whileHover={cardHover}
               className="project-card"
             >
-              {/* Image container with reveal animation */}
               <motion.div
                 className="project-image-container"
                 onClick={() =>
@@ -181,7 +195,6 @@ const ProjectsSection = () => {
                   {project.description}
                 </motion.p>
 
-                {/* Tags with staggered animation */}
                 <div className="project-tags">
                   {project.tags.map((tag, i) => (
                     <motion.span
@@ -199,7 +212,6 @@ const ProjectsSection = () => {
                   ))}
                 </div>
 
-                {/* Links with hover effects */}
                 <div className="project-links">
                   {project.github && (
                     <motion.a

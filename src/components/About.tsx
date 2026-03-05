@@ -6,13 +6,22 @@ import {
   slideFromLeft,
   gridItem,
 } from "./animations";
+import { useCounter } from "../hooks/useCounter";
 
-const stats = [
-  { number: "1.7", label: "Years Exp." },
-  { number: "350+", label: "Test Cases" },
-  { number: "150+", label: "Automation Scripts" },
-  { number: "2", label: "Projects" },
-];
+const StatItem = ({ number, label }: { number: number; label: string }) => {
+  const { count, ref } = useCounter(number);
+  const isDecimal = label.includes("Years");
+  
+  return (
+    <motion.div ref={ref} className="stat-item" variants={gridItem}>
+      <div className="stat-number">
+        {isDecimal ? count.toFixed(1) : count}
+        {label.includes("+") && "+"}
+      </div>
+      <div className="stat-label">{label}</div>
+    </motion.div>
+  );
+};
 
 const About = () => {
   const paragraphs = [
@@ -41,7 +50,6 @@ const About = () => {
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
-        {/* Header with animated divider */}
         <div className="about-header">
           <motion.h2
             className="about-title"
@@ -56,7 +64,6 @@ const About = () => {
           />
         </div>
 
-        {/* Content with staggered paragraphs */}
         <motion.div className="about-content">
           {paragraphs.map((para, index) => (
             <motion.p
@@ -98,7 +105,6 @@ const About = () => {
           ))}
         </motion.div>
 
-        {/* Stats grid */}
         <motion.div
           className="about-stats"
           initial="hidden"
@@ -106,12 +112,10 @@ const About = () => {
           viewport={{ once: true, amount: 0.3 }}
           variants={containerVariants}
         >
-          {stats.map((stat, i) => (
-            <motion.div key={i} className="stat-item" variants={gridItem}>
-              <div className="stat-number">{stat.number}</div>
-              <div className="stat-label">{stat.label}</div>
-            </motion.div>
-          ))}
+          <StatItem number={1.7} label="Years Exp." />
+          <StatItem number={350} label="Test Cases+" />
+          <StatItem number={150} label="Automation Scripts+" />
+          <StatItem number={2} label="Projects" />
         </motion.div>
       </motion.div>
     </section>

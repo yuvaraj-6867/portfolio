@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FiMail, FiLinkedin, FiGithub } from "react-icons/fi";
+import { FiMail, FiLinkedin, FiGithub, FiCopy, FiCheck } from "react-icons/fi";
 import { Phone, MapPin, Calendar } from "lucide-react";
-import emailjs from "emailjs-com";
 import {
   containerVariants,
   itemVariants,
@@ -22,6 +21,13 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState({ text: "", isError: false });
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText("yuvaraj6867@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -33,30 +39,29 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const templateParams = {
-      name: formData.name,
-      email: formData.email,
-      subject: formData.subject,
-      message: formData.message,
-    };
-
-    emailjs
-      .send(
-        "service_0i00e69",
-        "template_wvbcbbf",
-        templateParams,
-        "3y2xX9KZEAOy-Z-hm"
-      )
-      .then(() => {
-        setFeedback({ text: "Message sent successfully!", isError: false });
-        setFormData({ name: "", email: "", subject: "", message: "" });
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        access_key: "4b552cc0-7644-4d02-945e-cdc359ac1838",
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setFeedback({ text: "Message sent successfully!", isError: false });
+          setFormData({ name: "", email: "", subject: "", message: "" });
+        } else {
+          setFeedback({ text: "Failed to send message. Please try again.", isError: true });
+        }
         setTimeout(() => setFeedback({ text: "", isError: false }), 3000);
       })
       .catch(() => {
-        setFeedback({
-          text: "Failed to send message. Please try again later.",
-          isError: true,
-        });
+        setFeedback({ text: "Failed to send message. Please try again later.", isError: true });
         setTimeout(() => setFeedback({ text: "", isError: false }), 3000);
       })
       .finally(() => setIsSubmitting(false));
@@ -92,11 +97,11 @@ const Contact = () => {
       label: "Location",
       value: "Coimbatore, Tamil Nadu, India",
     },
-    {
-      icon: <Calendar className="contact-icon-blue" />,
-      label: "Availability",
-      value: "Open to full-time opportunities",
-    },
+    // {
+    //   icon: <Calendar className="contact-icon-blue" />,
+    //   label: "Availability",
+    //   value: "Open to full-time opportunities",
+    // },
   ];
 
   // Form field animation
@@ -170,7 +175,7 @@ const Contact = () => {
                 >
                   {icon}
                 </motion.div>
-                <div>
+                <div style={{ flex: 1 }}>
                   <p className="contact-label">{label}</p>
                   {link ? (
                     <a
@@ -189,6 +194,17 @@ const Contact = () => {
                     <p className="contact-value">{value}</p>
                   )}
                 </div>
+                {label === "Email" && (
+                  <motion.button
+                    onClick={copyEmail}
+                    className="copy-btn"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    title="Copy email"
+                  >
+                    {copied ? <FiCheck size={16} /> : <FiCopy size={16} />}
+                  </motion.button>
+                )}
               </motion.div>
             ))}
           </motion.div>

@@ -7,20 +7,20 @@ import { FaCss3Alt, FaJs } from "react-icons/fa6";
 
 const SkillsSection = () => {
   const skills = [
-    { name: "Playwright", icon: <div className="skill-emoji">🎭</div>, level: "Intermediate" },
-    { name: "Selenium", icon: <SiSelenium className="icon-green" />, level: "Intermediate" },
-    { name: "Manual Testing", icon: <FaLaptopCode className="icon-yellow" />, level: "Intermediate" },
-    { name: "TypeScript", icon: <SiTypescript className="icon-blue-dark" />, level: "Intermediate" },
-    { name: "JavaScript", icon: <FaJs className="icon-yellow" />, level: "Intermediate" },
-    { name: "Ruby", icon: <SiRuby className="icon-cyan" />, level: "Intermediate" },
-    { name: "JIRA / Linear", icon: <SiJira className="icon-blue" />, level: "Intermediate" },
+    { name: "Playwright", icon: <div className="skill-emoji">🎭</div> },
+    { name: "Selenium", icon: <SiSelenium className="icon-green" /> },
+    { name: "Manual Testing", icon: <FaLaptopCode className="icon-yellow" /> },
+    { name: "TypeScript", icon: <SiTypescript className="icon-blue-dark" /> },
+    { name: "JavaScript", icon: <FaJs className="icon-yellow" /> },
+    { name: "Ruby", icon: <SiRuby className="icon-cyan" /> },
+    { name: "JIRA / Linear", icon: <SiJira className="icon-blue" /> },
     { name: "Jenkins", icon: <SiJenkins className="icon-orange" />, level: "Beginner" },
-    { name: "Git / GitHub", icon: <FaGitAlt className="icon-orange" />, level: "Intermediate" },
+    { name: "Git / GitHub", icon: <FaGitAlt className="icon-orange" /> },
     { name: "React", icon: <FaReact className="icon-blue" />, level: "Beginner" },
-    { name: "CSS / HTML", icon: <FaCss3Alt className="icon-blue" />, level: "Intermediate" },
-    { name: "Test Cases", icon: <div className="skill-emoji">📝</div>, level: "Intermediate" },
-    { name: "JMeter", icon: <div className="skill-emoji">⚡</div>, level: "Beginner" },
-    { name: "Bug Tracking", icon: <div className="skill-emoji">🐞</div>, level: "Intermediate" },
+    { name: "CSS / HTML", icon: <FaCss3Alt className="icon-blue" /> },
+    { name: "Test Cases", icon: <div className="skill-emoji">📝</div> },
+    { name: "JMeter", icon: <div className="skill-emoji">⚡</div> },
+    { name: "Bug Tracking", icon: <div className="skill-emoji">🐞</div> },
   ];
 
   return (
@@ -35,7 +35,7 @@ const SkillsSection = () => {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
+          viewport={{ once: true, amount: 0.2 }}
           variants={gridContainer}
           className="skills-grid"
         >
@@ -45,6 +45,10 @@ const SkillsSection = () => {
               variants={gridItem}
               whileHover={cardHover}
               className="skill-card"
+              initial={{ opacity: 0, scale: 0.8, y: 30 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08, duration: 0.4 }}
             >
               <div className="skill-content">
                 <motion.div
@@ -63,9 +67,7 @@ const SkillsSection = () => {
                 </motion.div>
                 <div className="skill-info">
                   <h3 className="skill-name">{skill.name}</h3>
-                  <span className={`skill-level skill-level-${skill.level.toLowerCase()}`}>
-                    {skill.level}
-                  </span>
+
                 </div>
               </div>
             </motion.div>

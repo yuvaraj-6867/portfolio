@@ -12,40 +12,50 @@ const Navbar = () => {
     { name: 'Home', id: 'home' },
     { name: 'Skills', id: 'skills' },
     { name: 'Projects', id: 'projects' },
+    { name: 'Experience', id: 'experience' },
     { name: 'About', id: 'about' },
     { name: 'Contact', id: 'contact' },
   ], []);
 
   useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
 
-      // Check if at top of page
-      if (window.scrollY < 100) {
-        setActiveLink('home');
-        return;
-      }
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        // Check if at top of page
+        if (window.scrollY < 100) {
+          setActiveLink('home');
+          window.history.replaceState(null, '', '/');
+          return;
+        }
 
-      // Find which section is currently in view
-      let currentSection = 'home';
-      const navbarHeight = 100;
+        // Find which section is currently in view
+        let currentSection = 'home';
+        const navbarHeight = 100;
 
-      for (const link of navLinks) {
-        const section = document.getElementById(link.id);
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          if (rect.top <= navbarHeight && rect.bottom > navbarHeight) {
-            currentSection = link.id;
+        for (const link of navLinks) {
+          const section = document.getElementById(link.id);
+          if (section) {
+            const rect = section.getBoundingClientRect();
+            if (rect.top <= navbarHeight && rect.bottom > navbarHeight) {
+              currentSection = link.id;
+            }
           }
         }
-      }
 
-      setActiveLink(currentSection);
+        setActiveLink(currentSection);
+        window.history.replaceState(null, '', currentSection === 'home' ? '/' : `/${currentSection}`);
+      }, 100);
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Call once on mount
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
   }, [navLinks]);
 
   const scrollToSection = (id: string) => {
@@ -56,7 +66,7 @@ const Navbar = () => {
         top: 0,
         behavior: 'smooth',
       });
-      window.history.pushState(null, '', '/');
+      window.history.replaceState(null, '', '/');
     } else {
       const element = document.getElementById(id);
       if (element) {
@@ -66,7 +76,7 @@ const Navbar = () => {
           top: elementPosition - navbarHeight,
           behavior: 'smooth',
         });
-        window.history.pushState(null, '', `#${id}`);
+        window.history.replaceState(null, '', `/${id}`);
       }
     }
     setIsOpen(false);

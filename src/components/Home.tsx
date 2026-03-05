@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { FiDownload } from "react-icons/fi";
 import {
@@ -72,6 +72,9 @@ const AnimatedText = ({ text, className }: { text: string; className?: string })
 
 const Home = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(contentRef, { once: true, amount: 0.2 });
+  
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -99,6 +102,7 @@ const Home = () => {
 
   return (
     <section id="home" className="home-section" ref={sectionRef}>
+      <div id="main-content">
       {/* Animated Background with parallax */}
       <motion.div className="home-background" style={{ y: backgroundY }} />
 
@@ -134,9 +138,10 @@ const Home = () => {
 
       {/* Main content */}
       <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
+        ref={contentRef}
+        initial={{ opacity: 0, y: 50 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="home-content"
       >
         <div className="home-grid">
@@ -210,9 +215,13 @@ const Home = () => {
                 className="btn-download"
                 whileHover={buttonHover}
                 whileTap={buttonTap}
+                onClick={() => {
+                  const downloads = parseInt(localStorage.getItem("cvDownloads") || "0");
+                  localStorage.setItem("cvDownloads", (downloads + 1).toString());
+                }}
               >
                 <FiDownload size={16} />
-                Download CV
+                Download Resume
               </motion.a>
             </motion.div>
           </motion.div>
@@ -255,6 +264,7 @@ const Home = () => {
         </div>
       </motion.div>
 
+      </div>
     </section>
   );
 };

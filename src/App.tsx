@@ -7,20 +7,40 @@ import Navbar from "./components/Navbar";
 import About from "./components/About";
 import SplashScreen from "./components/SplashScreen";
 import ScrollToTop from "./components/ScrollToTop";
+import ScrollProgress from "./components/ScrollProgress";
+import SEO from "./components/SEO";
+import Experience from "./components/Experience";
+import CursorTrail from "./components/CursorTrail";
+import ViewCounter from "./components/ViewCounter";
+import ShareButton from "./components/ShareButton";
+import SkipToContent from "./components/SkipToContent";
+import { useKeyboardNav } from "./hooks/useKeyboardNav";
+import { ToastProvider } from "./components/Toast";
 
 const App = () => {
+  useKeyboardNav();
+
   return (
-    <div>
-      <SplashScreen />
-      <Navbar/>
-      <Home />
-      <SkillsSection />
-      <ProjectsSection />
-      <About/>
-      <ContactSection />
-      <Footer />
-      <ScrollToTop />
-    </div>
+    <ToastProvider>
+      <div>
+        <SkipToContent />
+        <SEO />
+        <CursorTrail />
+        <ScrollProgress />
+        <ViewCounter />
+        <ShareButton />
+        <SplashScreen />
+        <Navbar/>
+        <Home />
+        <SkillsSection />
+        <ProjectsSection />
+        <Experience />
+        <About/>
+        <ContactSection />
+        <Footer />
+        <ScrollToTop />
+      </div>
+    </ToastProvider>
   );
 };
 
