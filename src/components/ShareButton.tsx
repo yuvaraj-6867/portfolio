@@ -1,10 +1,6 @@
-import { motion } from "framer-motion";
-import { FiShare2 } from "react-icons/fi";
-import { useToast } from "./Toast";
+import { Share2 } from "lucide-react";
 
 const ShareButton = () => {
-  const { showToast } = useToast();
-
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -13,25 +9,20 @@ const ShareButton = () => {
           text: "Check out my portfolio showcasing QA and automation testing projects",
           url: window.location.href,
         });
-      } catch (err) {
-        console.log("Share cancelled");
-      }
+      } catch {}
     } else {
       navigator.clipboard.writeText(window.location.href);
-      showToast("Link copied to clipboard!", "success");
     }
   };
 
   return (
-    <motion.button
-      className="share-btn"
+    <button
       onClick={handleShare}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
       title="Share Portfolio"
+      className="fixed bottom-4 right-20 z-50 p-3 bg-slate-800/80 border border-slate-700/50 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/50 rounded-full backdrop-blur-sm transition-all duration-300"
     >
-      <FiShare2 size={18} />
-    </motion.button>
+      <Share2 size={18} />
+    </button>
   );
 };
 

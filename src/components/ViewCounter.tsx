@@ -1,27 +1,21 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { FiEye } from "react-icons/fi";
+import { Eye } from "lucide-react";
 
 const ViewCounter = () => {
   const [views, setViews] = useState(0);
 
   useEffect(() => {
-    const currentViews = parseInt(localStorage.getItem("portfolioViews") || "0");
-    const newViews = currentViews + 1;
-    localStorage.setItem("portfolioViews", newViews.toString());
-    setViews(newViews);
+    const current = parseInt(localStorage.getItem("portfolioViews") || "0");
+    const next = current + 1;
+    localStorage.setItem("portfolioViews", next.toString());
+    setViews(next);
   }, []);
 
   return (
-    <motion.div
-      className="view-counter"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 2 }}
-    >
-      <FiEye size={16} />
+    <div className="fixed bottom-4 left-4 z-50 flex items-center gap-2 px-3 py-2 bg-slate-800/80 border border-slate-700/50 text-slate-400 text-xs rounded-full backdrop-blur-sm">
+      <Eye size={14} />
       <span>{views.toLocaleString()} views</span>
-    </motion.div>
+    </div>
   );
 };
 

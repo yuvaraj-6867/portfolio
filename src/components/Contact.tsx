@@ -1,319 +1,153 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { FiMail, FiLinkedin, FiGithub, FiCopy, FiCheck } from "react-icons/fi";
-import { Phone, MapPin, Calendar } from "lucide-react";
-import {
-  containerVariants,
-  itemVariants,
-  dividerExpand,
-  contactItemVariants,
-  buttonHover,
-  buttonTap,
-} from "./animations";
+import { useState } from 'react';
+import { Mail, Phone, MapPin, Linkedin, Github, Copy, Check, Send } from 'lucide-react';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState({ text: "", isError: false });
+  const [feedback, setFeedback] = useState({ text: '', isError: false });
   const [copied, setCopied] = useState(false);
 
   const copyEmail = () => {
-    navigator.clipboard.writeText("yuvaraj6867@gmail.com");
+    navigator.clipboard.writeText('yuvaraj6867@gmail.com');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        access_key: "4b552cc0-7644-4d02-945e-cdc359ac1838",
-        name: formData.name,
-        email: formData.email,
-        subject: formData.subject,
-        message: formData.message,
+        access_key: '4b552cc0-7644-4d02-945e-cdc359ac1838',
+        ...formData,
       }),
     })
-      .then((res) => res.json())
+      .then((r) => r.json())
       .then((data) => {
         if (data.success) {
-          setFeedback({ text: "Message sent successfully!", isError: false });
-          setFormData({ name: "", email: "", subject: "", message: "" });
+          setFeedback({ text: 'Message sent successfully!', isError: false });
+          setFormData({ name: '', email: '', subject: '', message: '' });
         } else {
-          setFeedback({ text: "Failed to send message. Please try again.", isError: true });
+          setFeedback({ text: 'Failed to send. Please try again.', isError: true });
         }
-        setTimeout(() => setFeedback({ text: "", isError: false }), 3000);
+        setTimeout(() => setFeedback({ text: '', isError: false }), 3000);
       })
       .catch(() => {
-        setFeedback({ text: "Failed to send message. Please try again later.", isError: true });
-        setTimeout(() => setFeedback({ text: "", isError: false }), 3000);
+        setFeedback({ text: 'Failed to send. Please try again later.', isError: true });
+        setTimeout(() => setFeedback({ text: '', isError: false }), 3000);
       })
       .finally(() => setIsSubmitting(false));
   };
 
-  const contactItems = [
-    {
-      icon: <FiMail className="contact-icon-purple" />,
-      label: "Email",
-      value: "yuvaraj6867@gmail.com",
-      link: "mailto:yuvaraj6867@gmail.com",
-    },
-    {
-      icon: <FiLinkedin className="contact-icon-blue" />,
-      label: "LinkedIn",
-      value: "linkedin.com/in/yuvaraj",
-      link: "https://www.linkedin.com/in/yuvaraj-b-608406270",
-    },
-    {
-      icon: <FiGithub className="contact-icon-yellow" />,
-      label: "GitHub",
-      value: "github.com/yuvaraj",
-      link: "https://github.com/yuvaraj-6867",
-    },
-    {
-      icon: <Phone className="contact-icon-blue" />,
-      label: "Phone",
-      value: "+91 9025986867",
-      link: "tel:+919025986867",
-    },
-    {
-      icon: <MapPin className="contact-icon-blue" />,
-      label: "Location",
-      value: "Coimbatore, Tamil Nadu, India",
-    },
-    // {
-    //   icon: <Calendar className="contact-icon-blue" />,
-    //   label: "Availability",
-    //   value: "Open to full-time opportunities",
-    // },
+  const contactInfo = [
+    { icon: Mail, label: 'Email', value: 'yuvaraj6867@gmail.com', href: 'mailto:yuvaraj6867@gmail.com', copyable: true },
+    { icon: Phone, label: 'Phone', value: '+91 9025986867', href: 'tel:+919025986867' },
+    { icon: MapPin, label: 'Location', value: 'Coimbatore, Tamil Nadu, India' },
+    { icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com/in/yuvaraj', href: 'https://www.linkedin.com/in/yuvaraj-b-608406270' },
+    { icon: Github, label: 'GitHub', value: 'github.com/yuvaraj-6867', href: 'https://github.com/yuvaraj-6867' },
   ];
 
-  // Form field animation
-  const formFieldVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.5,
-        ease: [0.6, 0.01, 0.05, 0.95],
-      },
-    }),
-  };
-
   return (
-    <section id="contact" className="contact-section">
-      <div className="container">
-        {/* Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={containerVariants}
-          className="contact-header"
-        >
-          <motion.h2 variants={itemVariants} className="contact-title">
-            Contact Me
-          </motion.h2>
-          <motion.div
-            className="contact-divider"
-            variants={dividerExpand}
-            style={{ originX: 0.5 }}
-          />
-          <motion.p variants={itemVariants} className="contact-subtitle">
-            Have a project that needs testing? Feel free to reach out – I'm
-            always open to discuss new opportunities.
-          </motion.p>
-        </motion.div>
+    <section id="contact" className="py-24 bg-slate-950 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
 
-        {/* Main Grid */}
-        <div className="contact-grid">
-          {/* Contact Info */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-            className="contact-info-card"
-          >
-            <motion.h3 variants={itemVariants} className="contact-card-title">
-              Contact Information
-            </motion.h3>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-5xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Get In <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">Touch</span>
+            </h2>
+            <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-teal-500 mx-auto rounded-full mb-4" />
+            <p className="text-slate-400 max-w-2xl mx-auto">
+              Have a project in mind or want to discuss quality assurance opportunities? Let's connect!
+            </p>
+          </div>
 
-            {contactItems.map(({ icon, label, value, link }, index) => (
-              <motion.div
-                key={index}
-                className="contact-item"
-                variants={contactItemVariants}
-                whileHover={{
-                  x: 8,
-                  backgroundColor: "rgba(139, 92, 246, 0.1)",
-                  transition: { duration: 0.2 },
-                }}
-              >
-                <motion.div
-                  className="contact-icon-wrapper"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  {icon}
-                </motion.div>
-                <div style={{ flex: 1 }}>
-                  <p className="contact-label">{label}</p>
-                  {link ? (
-                    <a
-                      href={link}
-                      target={
-                        link.startsWith("mailto:") || link.startsWith("tel:")
-                          ? "_self"
-                          : "_blank"
-                      }
-                      rel="noopener noreferrer"
-                      className="contact-link"
-                    >
-                      {value}
-                    </a>
-                  ) : (
-                    <p className="contact-value">{value}</p>
-                  )}
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Contact Info */}
+            <div className="space-y-4">
+              {contactInfo.map(({ icon: Icon, label, value, href, copyable }, i) => (
+                <div key={i} className="bg-slate-800/50 border border-slate-700/50 p-5 rounded-xl hover:bg-slate-800/70 hover:border-cyan-500/50 transition-all duration-300 backdrop-blur-sm group">
+                  <div className="flex items-start space-x-4">
+                    <div className="p-3 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 rounded-xl group-hover:from-cyan-500/30 group-hover:to-teal-500/30 transition-all flex-shrink-0">
+                      <Icon className="text-cyan-400" size={18} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-slate-400 text-xs mb-1">{label}</p>
+                      {href ? (
+                        <a href={href} target={href.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer"
+                          className="text-white text-sm hover:text-cyan-400 transition-colors truncate block">
+                          {value}
+                        </a>
+                      ) : (
+                        <p className="text-white text-sm truncate">{value}</p>
+                      )}
+                    </div>
+                    {copyable && (
+                      <button onClick={copyEmail} className="text-slate-400 hover:text-cyan-400 transition-colors flex-shrink-0">
+                        {copied ? <Check size={16} /> : <Copy size={16} />}
+                      </button>
+                    )}
+                  </div>
                 </div>
-                {label === "Email" && (
-                  <motion.button
-                    onClick={copyEmail}
-                    className="copy-btn"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    title="Copy email"
-                  >
-                    {copied ? <FiCheck size={16} /> : <FiCopy size={16} />}
-                  </motion.button>
-                )}
-              </motion.div>
-            ))}
-          </motion.div>
+              ))}
+            </div>
 
-          {/* Contact Form */}
-          <motion.form
-            onSubmit={handleSubmit}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-            className="contact-form-card"
-          >
-            <motion.h3 variants={itemVariants} className="contact-card-title">
-              Send Me a Message
-            </motion.h3>
-
-            <motion.div
-              className="form-group"
-              custom={0}
-              variants={formFieldVariants}
-            >
-              <label className="form-label">Your Name</label>
-              <motion.input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="form-input"
-                whileFocus={{ scale: 1.01, borderColor: "rgba(139, 92, 246, 0.5)" }}
-              />
-            </motion.div>
-
-            <motion.div
-              className="form-group"
-              custom={1}
-              variants={formFieldVariants}
-            >
-              <label className="form-label">Email Address</label>
-              <motion.input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="form-input"
-                whileFocus={{ scale: 1.01, borderColor: "rgba(139, 92, 246, 0.5)" }}
-              />
-            </motion.div>
-
-            <motion.div
-              className="form-group"
-              custom={2}
-              variants={formFieldVariants}
-            >
-              <label className="form-label">Subject</label>
-              <motion.input
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                required
-                className="form-input"
-                whileFocus={{ scale: 1.01, borderColor: "rgba(139, 92, 246, 0.5)" }}
-              />
-            </motion.div>
-
-            <motion.div
-              className="form-group"
-              custom={3}
-              variants={formFieldVariants}
-            >
-              <label className="form-label">Message</label>
-              <motion.textarea
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows={5}
-                className="form-textarea"
-                whileFocus={{ scale: 1.01, borderColor: "rgba(139, 92, 246, 0.5)" }}
-              />
-            </motion.div>
-
-            <motion.button
-              type="submit"
-              disabled={isSubmitting}
-              className="submit-btn"
-              variants={itemVariants}
-              whileHover={buttonHover}
-              whileTap={buttonTap}
-            >
-              {isSubmitting ? "Sending..." : "Send Message"}
-            </motion.button>
-
-            {feedback.text && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className={`feedback-message ${
-                  feedback.isError ? "feedback-error" : "feedback-success"
-                }`}
+            {/* Contact Form */}
+            <form onSubmit={handleSubmit} className="lg:col-span-2 bg-slate-800/50 border border-slate-700/50 rounded-xl p-8 backdrop-blur-sm">
+              <h3 className="text-xl font-bold text-white mb-6">Send Me a Message</h3>
+              <div className="grid sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-slate-400 text-sm mb-2">Your Name</label>
+                  <input
+                    type="text" name="name" value={formData.name} required
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full bg-slate-900/50 border border-slate-700/50 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50 focus:bg-slate-900 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-400 text-sm mb-2">Email Address</label>
+                  <input
+                    type="email" name="email" value={formData.email} required
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full bg-slate-900/50 border border-slate-700/50 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50 focus:bg-slate-900 transition-all"
+                  />
+                </div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-slate-400 text-sm mb-2">Subject</label>
+                <input
+                  type="text" name="subject" value={formData.subject} required
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  className="w-full bg-slate-900/50 border border-slate-700/50 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50 focus:bg-slate-900 transition-all"
+                />
+              </div>
+              <div className="mb-6">
+                <label className="block text-slate-400 text-sm mb-2">Message</label>
+                <textarea
+                  name="message" value={formData.message} required rows={5}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="w-full bg-slate-900/50 border border-slate-700/50 text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50 focus:bg-slate-900 transition-all resize-none"
+                />
+              </div>
+              <button
+                type="submit" disabled={isSubmitting}
+                className="w-full inline-flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 font-semibold rounded-lg transition-all duration-200 disabled:opacity-50"
               >
-                {feedback.text}
-              </motion.div>
-            )}
-          </motion.form>
+                <Send size={18} />
+                <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
+              </button>
+              {feedback.text && (
+                <p className={`mt-4 text-sm text-center ${feedback.isError ? 'text-red-400' : 'text-green-400'}`}>
+                  {feedback.text}
+                </p>
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </section>

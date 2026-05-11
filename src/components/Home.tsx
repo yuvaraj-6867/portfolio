@@ -1,272 +1,196 @@
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import { FiDownload } from "react-icons/fi";
-import {
-  containerVariants,
-  itemVariants,
-  badgeFloat,
-  imageReveal,
-  wordRevealContainer,
-  wordReveal,
-  buttonHover,
-  buttonTap,
-  pulseGlow,
-} from "./animations";
-import profileImage from "../assets/sauce-labs.svg";
+import { useState, useEffect } from 'react';
+import { ArrowRight, Download, Github, Linkedin, Mail, Terminal } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const roles = ["Quality Analyst", "Automation Tester", "QA Professional", "Test Engineer"];
+// Folio-style: words slide up from masked container
+const maskReveal = {
+  hidden: { y: '110%', opacity: 0 },
+  visible: (i: number) => ({
+    y: '0%',
+    opacity: 1,
+    transition: { duration: 0.8, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
 
-const useTypedText = (texts: string[]) => {
-  const [displayText, setDisplayText] = useState("");
-  const [textIndex, setTextIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
+
+const Hero = () => {
+  const [displayText, setDisplayText] = useState('');
+  const fullText = 'Quality Analyst';
 
   useEffect(() => {
-    const currentText = texts[textIndex];
-    const speed = isDeleting ? 50 : 80;
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index <= fullText.length) { setDisplayText(fullText.slice(0, index)); index++; }
+      else clearInterval(timer);
+    }, 80);
+    return () => clearInterval(timer);
+  }, []);
 
-    const timer = setTimeout(() => {
-      if (!isDeleting && displayText === currentText) {
-        setTimeout(() => setIsDeleting(true), 1500);
-        return;
-      }
-      if (isDeleting && displayText === "") {
-        setIsDeleting(false);
-        setTextIndex((prev) => (prev + 1) % texts.length);
-        return;
-      }
-      setDisplayText((prev) =>
-        isDeleting ? prev.slice(0, -1) : currentText.slice(0, prev.length + 1)
-      );
-    }, speed);
-
-    return () => clearTimeout(timer);
-  }, [displayText, isDeleting, textIndex, texts]);
-
-  return displayText;
-};
-
-// Animated text component for word-by-word reveal
-const AnimatedText = ({ text, className }: { text: string; className?: string }) => {
-  const words = text.split(" ");
-  return (
-    <motion.span
-      variants={wordRevealContainer}
-      initial="hidden"
-      animate="visible"
-      className={className}
-      style={{ display: "inline-flex", flexWrap: "wrap", gap: "0.3em" }}
-    >
-      {words.map((word, index) => (
-        <motion.span
-          key={index}
-          variants={wordReveal}
-          style={{ display: "inline-block" }}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
-};
-
-const Home = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(contentRef, { once: true, amount: 0.2 });
-  
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  // Parallax effects
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);
-
-  const typedText = useTypedText(roles);
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const navbarHeight = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: elementPosition - navbarHeight,
-        behavior: "smooth",
-      });
-      window.history.pushState(null, "", `#${id}`);
-    }
+  const scrollToContact = () => {
+    const el = document.querySelector('#contact');
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
   };
 
+  const stats = [
+    { value: '1.7+', label: 'Years' },
+    { value: '350+', label: 'Test Cases' },
+    { value: '150+', label: 'Scripts' },
+    { value: '5', label: 'Projects' },
+  ];
+
   return (
-    <section id="home" className="home-section" ref={sectionRef}>
-      <div id="main-content">
-      {/* Animated Background with parallax */}
-      <motion.div className="home-background" style={{ y: backgroundY }} />
+    <section id="hero" className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+      <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.25, 0.15] }} transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-20 -left-40 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
+      <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }} transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        className="absolute bottom-20 -right-40 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl" />
 
-      {/* Floating dots with enhanced animation */}
-      <div className="floating-dots-container">
-        {[...Array(25)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{
-              opacity: [0.05, 0.15, 0.05],
-              scale: [1, 1.2, 1],
-              x: [0, Math.random() * 150 - 75, 0],
-              y: [0, Math.random() * 150 - 75, 0],
-            }}
-            transition={{
-              duration: Math.random() * 15 + 10,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-              delay: Math.random() * 2,
-            }}
-            className="floating-dot"
-            style={{
-              width: `${Math.random() * 12 + 4}px`,
-              height: `${Math.random() * 12 + 4}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-      </div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="min-h-screen flex items-center">
+          <div className="grid lg:grid-cols-2 gap-12 items-center w-full py-20">
 
-      {/* Main content */}
-      <motion.div
-        ref={contentRef}
-        initial={{ opacity: 0, y: 50 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="home-content"
-      >
-        <div className="home-grid">
-          {/* Left content with parallax */}
-          <motion.div className="home-text-content" style={{ y: textY }}>
-            {/* Badge with bounce animation */}
-            <motion.div variants={badgeFloat}>
-              <motion.span
-                className="badge"
-                animate={{
-                  y: [0, -8, 0],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                QUALITY ANALYST
-              </motion.span>
-            </motion.div>
+            {/* Left */}
+            <div className="space-y-8">
 
-            {/* Animated title with word reveal */}
-            <motion.h1 variants={itemVariants} className="home-title">
-              Hi, I'm{" "}
-              <motion.span
-                className="gradient-text"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-              >
-                Yuvaraj
-              </motion.span>
-            </motion.h1>
+              {/* Badge — fade in */}
+              <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible"
+                className="inline-flex items-center space-x-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-full text-sm font-medium backdrop-blur-sm">
+                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
+                <span>Available for opportunities</span>
+              </motion.div>
 
-            {/* Typed role text */}
-            <motion.div variants={itemVariants} className="typed-role">
-              <span className="typed-role-prefix">I'm a </span>
-              <span className="typed-text">{typedText}</span>
-              <span className="typed-cursor" />
-            </motion.div>
+              {/* Name — mask reveal word by word */}
+              <div>
+                <div className="overflow-hidden">
+                  <motion.h1
+                    custom={0} variants={maskReveal} initial="hidden" animate="visible"
+                    className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight"
+                  >
+                    Yuvaraj B
+                  </motion.h1>
+                </div>
+                {/* Typed role */}
+                <motion.div custom={1} variants={fadeUp} initial="hidden" animate="visible"
+                  className="flex items-center space-x-2 text-2xl md:text-3xl font-mono mt-3">
+                  <Terminal className="text-cyan-400" size={28} />
+                  <span className="text-cyan-400">&gt;</span>
+                  <span className="text-orange-400">{displayText}</span>
+                  <span className="w-1 h-8 bg-orange-400 animate-pulse inline-block" />
+                </motion.div>
+              </div>
 
-            {/* Description with word-by-word reveal */}
-            <motion.div variants={itemVariants} className="home-description">
-              <AnimatedText
-                text="Results-driven QA professional with 1.7 years of expertise in manual and automation testing. Proficient in Playwright, Selenium, and defect management using JIRA and Linear."
-              />
-            </motion.div>
+              {/* Bio */}
+              <motion.p custom={2} variants={fadeUp} initial="hidden" animate="visible"
+                className="text-lg text-slate-300 leading-relaxed max-w-xl">
+                Quality Analyst with 1.7 years of expertise in manual and automation testing.
+                Delivered 350+ test cases and 150+ automation scripts across payroll and CRM systems at Drylogic Solutions, Coimbatore.
+              </motion.p>
 
-            {/* Buttons with enhanced hover effects */}
-            <motion.div variants={itemVariants} className="home-buttons">
-              <motion.button
-                onClick={() => scrollToSection("contact")}
-                className="btn-primary"
-                whileHover={buttonHover}
-                whileTap={buttonTap}
-              >
-                Contact Me
-              </motion.button>
-              <motion.button
-                onClick={() => scrollToSection("projects")}
-                className="btn-secondary"
-                whileHover={buttonHover}
-                whileTap={buttonTap}
-              >
-                View Projects
-              </motion.button>
-              <motion.a
-                href="/resume.pdf"
-                download
-                className="btn-download"
-                whileHover={buttonHover}
-                whileTap={buttonTap}
-                onClick={() => {
-                  const downloads = parseInt(localStorage.getItem("cvDownloads") || "0");
-                  localStorage.setItem("cvDownloads", (downloads + 1).toString());
-                }}
-              >
-                <FiDownload size={16} />
-                Download Resume
-              </motion.a>
-            </motion.div>
-          </motion.div>
+              {/* Stats */}
+              <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible"
+                className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {stats.map((stat, i) => (
+                  <motion.div key={i} whileHover={{ scale: 1.06, y: -4 }} transition={{ type: 'spring', stiffness: 300 }}
+                    className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-4 hover:border-cyan-500/50 transition-colors duration-300 cursor-default">
+                    <div className="text-2xl font-bold text-cyan-400">{stat.value}</div>
+                    <div className="text-xs text-slate-400 mt-1">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </motion.div>
 
-          {/* Right image with parallax and reveal animation */}
-          <motion.div
-            variants={imageReveal}
-            className="home-image-container"
-            style={{ y: imageY }}
-          >
-            <div className="image-wrapper">
-              {/* Animated glow effect */}
-              <motion.div
-                className="image-glow"
-                animate={pulseGlow}
-              />
-              <motion.div
-                className="image-frame"
-                whileHover={{
-                  scale: 1.03,
-                  rotate: 2,
-                  transition: { duration: 0.3 },
-                }}
-              >
-                <motion.img
-                  src={profileImage}
-                  alt="Profile Illustration"
-                  className="profile-image"
-                  initial={{ scale: 1.1 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 1.2, ease: [0.6, 0.01, 0.05, 0.95] }}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "data:image/svg+xml;base64,...";
-                    console.error("Failed to load profile image");
-                  }}
-                />
+              {/* Buttons */}
+              <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible"
+                className="flex flex-col sm:flex-row gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.04, boxShadow: '0 0 30px rgba(6,182,212,0.4)' }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={scrollToContact}
+                  className="inline-flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-medium rounded-lg shadow-lg shadow-cyan-500/30 group transition-all">
+                  <span>Get In Touch</span>
+                  <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+                    <ArrowRight size={20} />
+                  </motion.span>
+                </motion.button>
+                <motion.a
+                  whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+                  href="/resume.pdf" download
+                  className="inline-flex items-center justify-center space-x-2 px-8 py-4 border-2 border-slate-600 hover:border-cyan-500 hover:bg-cyan-500/10 text-white font-medium rounded-lg backdrop-blur-sm transition-all">
+                  <Download size={20} />
+                  <span>Resume</span>
+                </motion.a>
+              </motion.div>
+
+              {/* Socials */}
+              <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible"
+                className="flex items-center space-x-4">
+                {[
+                  { href: 'https://github.com/yuvaraj-6867', icon: Github, label: 'GitHub' },
+                  { href: 'https://www.linkedin.com/in/yuvaraj-b-608406270', icon: Linkedin, label: 'LinkedIn' },
+                  { href: 'mailto:yuvaraj6867@gmail.com', icon: Mail, label: 'Email' },
+                ].map(({ href, icon: Icon, label }) => (
+                  <motion.a key={label} href={href} target={href.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer"
+                    whileHover={{ scale: 1.15, y: -4, rotate: 5 }} whileTap={{ scale: 0.9 }}
+                    transition={{ type: 'spring', stiffness: 400 }}
+                    className="p-3 bg-slate-800/50 hover:bg-cyan-500/20 border border-slate-700/50 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-400 rounded-lg transition-colors duration-300">
+                    <Icon size={20} />
+                  </motion.a>
+                ))}
               </motion.div>
             </div>
-          </motion.div>
-        </div>
-      </motion.div>
 
+            {/* Right floating cards */}
+            <motion.div initial={{ opacity: 0, x: 80 }} animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="relative hidden lg:block">
+              <div className="relative w-full aspect-square">
+
+                <motion.div
+                  animate={{ y: [0, -14, 0] }}
+                  transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+                  whileHover={{ scale: 1.04 }}
+                  className="absolute top-0 right-0 w-64 bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-2xl shadow-cyan-500/10">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                  </div>
+                  <div className="font-mono text-sm space-y-2">
+                    <div className="text-cyan-400">$ playwright test</div>
+                    <div className="text-green-400">✓ Login flow passed</div>
+                    <div className="text-green-400">✓ Cart operations passed</div>
+                    <div className="text-slate-400">Tests: 150+ passed</div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  animate={{ y: [0, 14, 0] }}
+                  transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                  whileHover={{ scale: 1.04 }}
+                  className="absolute bottom-10 left-0 w-56 bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-2xl shadow-orange-500/10">
+                  <div className="text-orange-400 font-semibold mb-3">Test Coverage</div>
+                  <div className="space-y-3">
+                    {['Playwright', 'Selenium', 'Manual Testing'].map((label, i) => (
+                      <div key={i} className="text-sm text-slate-300">{label}</div>
+                    ))}
+                  </div>
+                </motion.div>
+
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
       </div>
     </section>
   );
 };
 
-export default Home;
+export default Hero;

@@ -1,130 +1,87 @@
-import { motion } from 'framer-motion';
-import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
-import type { JSX } from 'react';
-
-interface SocialLink {
-  icon: JSX.Element;
-  href: string;
-  name: string;
-  className: string;
-}
-
-const navLinks = [
-  { name: 'Home', id: 'home' },
-  { name: 'Skills', id: 'skills' },
-  { name: 'Projects', id: 'projects' },
-  { name: 'Experience', id: 'experience' },
-  { name: 'About', id: 'about' },
-  { name: 'Contact', id: 'contact' },
-];
-
-const scrollToSection = (id: string) => {
-  if (id === 'home') {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } else {
-    const element = document.getElementById(id);
-    if (element) {
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({ top: elementPosition - 80, behavior: 'smooth' });
-    }
-  }
-};
+import { Github, Linkedin, Mail } from 'lucide-react';
 
 const Footer = () => {
-  const socialLinks: SocialLink[] = [
-    { icon: <FiGithub />, href: "https://github.com/yuvaraj-6867", name: "GitHub", className: "github" },
-    { icon: <FiLinkedin />, href: "https://www.linkedin.com/in/yuvaraj-b-608406270/", name: "LinkedIn", className: "linkedin" },
-    { icon: <FiMail />, href: "mailto:yuvaraj6867@gmail.com", name: "Email", className: "email" },
+  const scrollTo = (href: string) => {
+    const el = document.querySelector(href);
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
+  const links = [
+    { label: 'About', href: '#about' },
+    { label: 'Experience', href: '#experience' },
+    { label: 'Projects', href: '#projects' },
+    { label: 'Skills', href: '#skills' },
+    { label: 'Contact', href: '#contact' },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 10,
-      },
-    },
-  };
-
   return (
-    <footer className="footer">
-      <div className="container">
-        <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="footer-divider"
-        />
+    <footer className="bg-gradient-to-b from-slate-900 to-slate-950 border-t border-slate-800">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid md:grid-cols-6 gap-8 mb-8">
 
-        {/* Quick nav links */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="footer-nav-links"
-        >
-          {navLinks.map((link) => (
-            <button
-              key={link.id}
-              className="footer-nav-link"
-              onClick={() => scrollToSection(link.id)}
+          {/* Brand */}
+          <div className="md:col-span-2">            <button
+              onClick={() => scrollTo('#hero')}
+              className="text-2xl font-bold text-white hover:text-cyan-400 transition-colors mb-4 font-mono block"
             >
-              {link.name}
+              &lt;Yuvaraj<span className="text-cyan-400">/</span>&gt;
             </button>
-          ))}
-        </motion.div>
+            <p className="text-slate-400 text-sm leading-relaxed max-w-md">
+              Quality Analyst specializing in automation testing with Playwright and Selenium.
+            </p>
+            <div className="flex space-x-3 mt-6">
+              {[
+                { icon: Github, href: 'https://github.com/yuvaraj-6867' },
+                { icon: Linkedin, href: 'https://www.linkedin.com/in/yuvaraj-b-608406270' },
+                { icon: Mail, href: 'mailto:yuvaraj6867@gmail.com' },
+              ].map(({ icon: Icon, href }, i) => (
+                <a key={i} href={href} target={href.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer"
+                  className="p-3 bg-slate-800/50 hover:bg-cyan-500/20 border border-slate-700/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 rounded-lg transition-all duration-300">
+                  <Icon size={18} />
+                </a>
+              ))}
+            </div>
+          </div>
 
-        <div className="footer-content">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="footer-text"
-          >
-            © {new Date().getFullYear()} Yuvaraj's Portfolio. All rights reserved.
-          </motion.p>
+          {/* Quick Links */}
+          <div className="md:col-span-2">
+            <h4 className="text-white font-semibold mb-4">Quick Links</h4>
+            <ul className="flex flex-wrap gap-x-8 gap-y-2">
+              {links.map(({ label, href }) => (
+                <li key={href}>
+                  <button
+                    onClick={() => scrollTo(href)}
+                    className="text-slate-400 hover:text-cyan-400 transition-colors text-sm"
+                  >
+                    {label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-            className="social-links"
-          >
-            {socialLinks.map((link, index) => (
-              <motion.a
-                key={`social-${index}`}
-                variants={itemVariants}
-                href={link.href}
-                target={link.href.startsWith('mailto:') ? '_self' : '_blank'}
-                rel="noopener noreferrer"
-                className={`social-link ${link.className}`}
-                whileHover={{ y: -2 }}
-                aria-label={link.name}
-              >
-                {link.icon}
-                <span className="social-tooltip">{link.name}</span>
-              </motion.a>
-            ))}
-          </motion.div>
+          {/* Contact */}
+          <div className="md:col-span-2">            <h4 className="text-white font-semibold mb-4">Contact</h4>
+            <ul className="space-y-2 text-sm text-slate-400">
+              <li>yuvaraj6867@gmail.com</li>
+              <li>+91 9025986867</li>
+              <li>Coimbatore, Tamil Nadu</li>
+              <li>India</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-slate-500 text-sm">
+            © {new Date().getFullYear()} Yuvaraj B. All rights reserved.
+          </p>
+          <p className="text-slate-500 text-sm">
+            Built with <span className="text-cyan-400">React</span> & <span className="text-cyan-400">TypeScript</span>
+          </p>
         </div>
       </div>
     </footer>
