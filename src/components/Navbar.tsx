@@ -74,7 +74,8 @@ const Navbar = () => {
             ))}
             <a
               href="/resume.pdf"
-              download
+              target="_blank"
+              rel="noopener noreferrer"
               className="ml-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-sm font-semibold rounded-lg transition-colors"
             >
               Resume
@@ -110,7 +111,8 @@ const Navbar = () => {
             ))}
             <a
               href="/resume.pdf"
-              download
+              target="_blank"
+              rel="noopener noreferrer"
               className="block w-full text-center px-4 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-sm font-semibold rounded-lg transition-colors mt-2"
             >
               Resume

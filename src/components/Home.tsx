@@ -121,7 +121,7 @@ const Hero = () => {
                 </motion.button>
                 <motion.a
                   whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                  href="/resume.pdf" download
+                  href="/resume.pdf" target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center justify-center space-x-2 px-8 py-4 border-2 border-slate-600 hover:border-cyan-500 hover:bg-cyan-500/10 text-white font-medium rounded-lg backdrop-blur-sm transition-all">
                   <Download size={20} />
                   <span>Resume</span>
