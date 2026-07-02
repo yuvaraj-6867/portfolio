@@ -6,7 +6,7 @@ const SocialSidebar = () => {
     { icon: <FiGithub size={20} />, href: "https://github.com/yuvaraj-6867", label: "GitHub", target: "_blank" },
     { icon: <FiLinkedin size={20} />, href: "https://www.linkedin.com/in/yuvaraj-b-608406270", label: "LinkedIn", target: "_blank" },
     { icon: <FiMail size={20} />, href: "mailto:yuvaraj6867@gmail.com", label: "Email", target: "_self" },
-    { icon: <FiFileText size={20} />, href: "/resume.pdf", label: "Resume", target: "_blank" },
+    { icon: <FiFileText size={20} />, href: "/yuvaraj.pdf", label: "Resume", target: "_blank" },
   ];
 
   return (

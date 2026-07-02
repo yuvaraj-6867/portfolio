@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 const experiences = [
   {
     role: 'Quality Analyst',
-    company: 'Drylogic Solutions',
+    company: 'Drylogics Solutions',
     duration: 'Jun 2025 – Present',
     period: '10 mos',
     type: 'Full-time · On-site',
@@ -22,7 +22,7 @@ const experiences = [
   },
   {
     role: 'Junior Test Engineer',
-    company: 'Drylogic Solutions',
+    company: 'Drylogics Solutions',
     duration: 'Aug 2024 – May 2025',
     period: '10 mos',
     type: 'Full-time · On-site',
@@ -39,7 +39,7 @@ const experiences = [
   },
   {
     role: 'QA Tester',
-    company: 'Drylogic Solutions',
+    company: 'Drylogics Solutions',
     duration: 'May 2024 – Jul 2024',
     period: '3 mos',
     type: 'Full-time · On-site',

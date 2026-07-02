@@ -35,7 +35,7 @@ const About = () => {
             <div className="space-y-6">
               <p className="text-lg text-slate-300 leading-relaxed">
                 Hello! I'm a <span className="text-cyan-400 font-semibold">Quality Analyst</span> with 2 years of expertise in manual and automation testing.
-                I've delivered 350+ test cases and 150+ automation scripts across payroll and CRM systems at Drylogic Solutions, Coimbatore.
+                I've delivered 350+ test cases and 150+ automation scripts across payroll and CRM systems at Drylogics Solutions, Coimbatore.
               </p>
               <p className="text-lg text-slate-300 leading-relaxed">
                 I'm proficient in <span className="text-cyan-400 font-semibold">Playwright (TypeScript)</span> and{' '}
