@@ -75,12 +75,9 @@ const Footer = () => {
 
         </div>
 
-        <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
           <p className="text-slate-500 text-sm">
             © {new Date().getFullYear()} Yuvaraj B. All rights reserved.
-          </p>
-          <p className="text-slate-500 text-sm">
-            Built with <span className="text-cyan-400">React</span> & <span className="text-cyan-400">TypeScript</span>
           </p>
         </div>
       </div>
