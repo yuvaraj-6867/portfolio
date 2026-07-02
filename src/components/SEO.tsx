@@ -5,7 +5,7 @@ const SEO = () => {
     document.title = "Yuvaraj - QA Engineer & Automation Tester Portfolio";
     
     const meta = [
-      { name: "description", content: "Quality Analyst with 1.7 years expertise in Playwright, Selenium, and test automation. View my portfolio of testing projects." },
+      { name: "description", content: "Quality Analyst with 2 years expertise in Playwright, Selenium, and test automation. View my portfolio of testing projects." },
       { name: "keywords", content: "QA Engineer, Automation Testing, Playwright, Selenium, TypeScript, Test Automation" },
       { property: "og:title", content: "Yuvaraj - QA Engineer Portfolio" },
       { property: "og:description", content: "Quality Analyst specializing in automation testing with Playwright and Selenium" },

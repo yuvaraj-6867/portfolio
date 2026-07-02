@@ -34,7 +34,7 @@ const About = () => {
             {/* Text */}
             <div className="space-y-6">
               <p className="text-lg text-slate-300 leading-relaxed">
-                Hello! I'm a <span className="text-cyan-400 font-semibold">Quality Analyst</span> with 1.7 years of expertise in manual and automation testing.
+                Hello! I'm a <span className="text-cyan-400 font-semibold">Quality Analyst</span> with 2 years of expertise in manual and automation testing.
                 I've delivered 350+ test cases and 150+ automation scripts across payroll and CRM systems at Drylogic Solutions, Coimbatore.
               </p>
               <p className="text-lg text-slate-300 leading-relaxed">
@@ -73,7 +73,7 @@ const About = () => {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { value: '1.7', label: 'Years Experience' },
+              { value: '2', label: 'Years Experience' },
               { value: '350+', label: 'Test Cases' },
               { value: '150+', label: 'Automation Scripts' },
               { value: '5', label: 'Projects' },

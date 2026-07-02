@@ -39,7 +39,7 @@ const Hero = () => {
   };
 
   const stats = [
-    { value: '1.7+', label: 'Years' },
+    { value: '2+', label: 'Years' },
     { value: '350+', label: 'Test Cases' },
     { value: '150+', label: 'Scripts' },
     { value: '5', label: 'Projects' },
@@ -90,7 +90,7 @@ const Hero = () => {
               {/* Bio */}
               <motion.p custom={2} variants={fadeUp} initial="hidden" animate="visible"
                 className="text-lg text-slate-300 leading-relaxed max-w-xl">
-                Quality Analyst with 1.7 years of expertise in manual and automation testing.
+                Quality Analyst with 2 years of expertise in manual and automation testing.
                 Delivered 350+ test cases and 150+ automation scripts across payroll and CRM systems at Drylogic Solutions, Coimbatore.
               </motion.p>
 
