@@ -27,7 +27,6 @@ const skillCategories = [
       { name: 'Manual Testing', level: 'Expert' },
       { name: 'Test Cases', level: 'Expert' },
       { name: 'Bug Tracking', level: 'Expert' },
-      { name: 'JMeter', level: 'Intermediate' },
     ],
   },
   {
@@ -37,7 +36,6 @@ const skillCategories = [
       { name: 'JIRA', level: 'Expert' },
       { name: 'Linear', level: 'Expert' },
       { name: 'Git / GitHub', level: 'Expert' },
-      { name: 'Jenkins', level: 'Intermediate' },
     ],
   },
   {
